@@ -20,7 +20,7 @@ grad = zeros(size(theta));
 % Note: grad should have the same dimensions as theta
 %
 total=0;
-gradtotal=0;
+
 for iter = 1:size(X,1)
 	Hx=sigmoid(theta'*X(iter,:)');	
 	total=total+(-y(iter)*log(Hx)-(1-y(iter))*log(1-Hx));

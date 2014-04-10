@@ -36,13 +36,19 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
+Hx=sigmoid(X*theta);
+Jmat=-y.*log(Hx)-(1.-y).*log(1.-Hx);
 
+temp=theta;
+temp(1)=0; %The first parameter is not regularized by convention
 
+J=sum(Jmat)/m + sum(temp.^2)*lambda/(2*m);
 
-
-
-
-
+Beta=Hx.-y;
+grad=X'*Beta;
+% '
+grad=grad./m;
+grad=grad+ temp.*(lambda/m);
 
 
 % =============================================================
