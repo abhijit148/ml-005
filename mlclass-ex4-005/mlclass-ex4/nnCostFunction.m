@@ -62,22 +62,69 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+%Solution for PART 1:
+a0=[ones(m,1) X];
+a1=sigmoid(Theta1*a0');
+%'
+a1=[ones(1,size(a1,2)); a1];
+temp=zeros(size(X, 1), 1);
+predictions=sigmoid(Theta2*a1);
+predictions=predictions';
+%[temp,p]=max(predictions',[],2);
+%
 
+%Using for loop
+Jsum=0;
+for iter=1:m
+	ylabel= [1 2 3 4 5 6 7 8 9 10] == y(iter);
+	for k=1:num_labels
+		Jsum+=-ylabel(k)*log(predictions(iter,k))-(1-ylabel(k))*log(1-predictions(iter,k));
+		end
+	end
 
+%For regularization: regEx is the regulization factor
+temp1=Theta1(1:end,2:end);
+temp2=Theta2(1:end,2:end);
+regEx=(lambda/(2*m))*(sum(temp1(:).^2)+sum(temp2(:).^2));
+J=Jsum/m+regEx;
 
+%Solution for PART 2:
+delta_3=zeros(m,num_labels);
+delta_2=zeros(m,hidden_layer_size);
+bigDelta=zeros(m,1);
 
+for t=1:m
+	ylabel= [1 2 3 4 5 6 7 8 9 10] == y(t);
+	for k=1:num_labels
+		delta_3(t,k)=predictions(t,k)-ylabel(k);
+		end
+	end
 
+temp=Theta2'*delta_3';
+z2=[ones(1,size(a1,2)); Theta1*a0'];
+delta_2=temp.*sigmoidGradient(z2);
+%'
+bigDelta1=delta_2(2:end,1:end)*a0;
+bigDelta2=delta_3(1:end,1:end)'*a1';
+Theta1_grad=bigDelta1./m;
+Theta2_grad=bigDelta2./m;
 
+%Solution for PART 3: Ragularization of Theta gradients
 
+%METHOD 1: Calculate the regularization for the entire theta gradient, 
+%then overwrite the (:,1) value with 0 before 9b) adding to the entire matrix.
 
+%gradReg1=lambda/m*Theta1;
+%gradReg2=lambda/m*Theta2;
+%gradReg1(:,1)=0;
+%gradReg2(:,1)=0;
+%Theta1_grad=Theta1_grad+gradReg1;
+%Theta2_grad=Theta2_grad+gradReg2;
 
+%METHOD 2: Calculate the regularization for indexes (:,2:end), and 9b) add them to theta gradients (:,2:end).
 
-
-
-
-
-
-
+Theta1_grad(1:end,2:end)=Theta1_grad(1:end,2:end)+(lambda/m)*Theta1(1:end,2:end);
+Theta2_grad(1:end,2:end)=Theta2_grad(1:end,2:end)+(lambda/m)*Theta2(1:end,2:end);
 
 
 % -------------------------------------------------------------
