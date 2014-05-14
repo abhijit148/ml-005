@@ -23,13 +23,19 @@ centroids = zeros(K, n);
 %               should contain the mean of the data points assigned to
 %               centroid i.
 %
-% Note: You can use a for-loop over the centroids to compute this.
-%
+% Note: You can use a for-loop over the centroids to compute this.;
 
-
-
-
-
+for c=1:K
+	num=0;
+	sumX=zeros(1,n);
+	for i=1:m
+		if (idx(i)==c)
+			sumX=sumX+X(i,:);
+			num=num+1;
+			end
+		end
+	centroids(c,:)=sumX/num;
+	end
 
 
 
